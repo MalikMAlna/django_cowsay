@@ -1,14 +1,24 @@
 from django.shortcuts import render, reverse, HttpResponseRedirect
+from django.views.generic import TemplateView
 from cowsave.forms import AddTextForm
 
 
-def index(request):
-    html = 'index.html'
-    form = AddTextForm(request.POST)
+class HomeView(TemplateView):
+    template_name = 'index.html'
 
-    if request.method == "POST":
+    def get(self, request):
+        form = AddTextForm()
+        return render(request, self.template_name)
+
+    def post(self, request):
+        html = 'index.html'
         form = AddTextForm(request.POST)
-        if form.is_valid():
-            form.cleaned_data
 
-    return render(request, html, {"form": form})
+        if request.method == "POST":
+            form = AddTextForm(request.POST)
+            if form.is_valid():
+                text = form.cleaned_data['post']
+                form = AddTextForm()
+
+        args = {"form": form, 'text': text}
+        return render(request, html, args)
