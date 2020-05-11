@@ -1,6 +1,8 @@
-from django.shortcuts import render, reverse, HttpResponseRedirect
+from django.shortcuts import render
 from django.views.generic import TemplateView
 from cowsave.forms import AddTextForm
+from cowsave.models import Text
+# import subprocess
 
 
 class HomeView(TemplateView):
@@ -8,17 +10,24 @@ class HomeView(TemplateView):
 
     def get(self, request):
         form = AddTextForm()
-        return render(request, self.template_name)
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request):
-        html = 'index.html'
         form = AddTextForm(request.POST)
 
-        if request.method == "POST":
-            form = AddTextForm(request.POST)
-            if form.is_valid():
-                text = form.cleaned_data['post']
-                form = AddTextForm()
-
+        if form.is_valid():
+            text = form.cleaned_data['text']
+            Text.objects.create(
+                text=text,
+            )
+            # cowsave = subprocess.run(f'cowsay {text}')
+        form = AddTextForm()
         args = {"form": form, 'text': text}
-        return render(request, html, args)
+        return render(request, self.template_name, args)
+
+
+def history(request):
+    html = 'history.html'
+    text_list = list(Text.objects.all())
+    texts = text_list[-10:][::-1]
+    return render(request, html, {"texts": texts})
