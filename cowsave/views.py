@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from cowsave.forms import AddTextForm
 from cowsave.models import Text
-# import subprocess
+import subprocess
 
 
 class HomeView(TemplateView):
@@ -20,9 +20,11 @@ class HomeView(TemplateView):
             Text.objects.create(
                 text=text,
             )
-            # cowsave = subprocess.run(f'cowsay {text}')
+            cowsave = subprocess.check_output(
+                f'cowsay {text}', shell=True)
+            cowsave = cowsave.decode("utf-8")
         form = AddTextForm()
-        args = {"form": form, 'text': text}
+        args = {"form": form, 'cowsave': cowsave}
         return render(request, self.template_name, args)
 
 
