@@ -1,9 +1,12 @@
 <a href="history/">History</a>
 <h1>Cowsave</h1>
 <h2>What will the cow say?</h2>
+{% comment %} {% for section in cowsave%}
+<h2>{{section}}</h2>
+{% endfor %} {% endcomment %}
+<p>{{cowsave}}</p>
 <form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Submit</button>
 </form>
-<p>{{cowsave}}</p>

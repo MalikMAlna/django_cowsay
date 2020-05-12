@@ -21,9 +21,13 @@ class HomeView(TemplateView):
                 text=text,
             )
             cowsave = subprocess.check_output(
-                f'cowsay {text}', shell=True)
-            cowsave = cowsave.decode("utf-8")
+                f'cowsay {text}', shell=True).decode("utf-8")
+            # cowsave_list = list(cowsave)
+            # cowsave_text = ""
+            # for num in cowsave_list:
+            #     cowsave_text += chr(num)
         form = AddTextForm()
+        # cowsave = cowsave_text.split("\n")
         args = {"form": form, 'cowsave': cowsave}
         return render(request, self.template_name, args)
 
