@@ -4,7 +4,13 @@
 {% comment %} {% for section in cowsave%}
 <h2>{{section}}</h2>
 {% endfor %} {% endcomment %}
-<p>{{cowsave}}</p>
+<div>
+<h3>
+<pre>
+{{cowsave}}
+</pre>
+</h3>
+</div>
 <form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
